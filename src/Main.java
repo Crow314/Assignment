@@ -13,17 +13,8 @@ public class Main {
         System.out.println("Password " + res_out);
     }
 
-    public static boolean isGoodPass(String pass){
-        if(!isInRange(pass, 4, 6)){
-            return false;
-        }
-        if(!hasLowerCase(pass)){
-            return false;
-        }
-        if(!hasUpperCase(pass)){
-            return false;
-        }
-        if(!hasNumeric(pass)){
+    private static boolean isGoodPass(String pass){
+        if(!isInRange(pass, 4, 6) || !hasLowerCase(pass) || !hasUpperCase(pass) || !hasNumeric(pass)){
             return false;
         }
 
