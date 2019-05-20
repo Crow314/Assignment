@@ -9,30 +9,55 @@ public class Main {
 
         Rect rect = new Rect(w, h);
 
-        System.out.println("The rectangle has " + rect.getHeight() + " height, " + rect.getWidth() + " width and " + rect.getArea() + " area.");
+        int area = rect.getArea();
+        Point[] points = rect.getPoints();
+
+        System.out.println(points[0] + " " + points[1] + " " + points[2] + " " + points[3] + " Area:" + area);
     }
 }
 
 class Rect{
-    private int width;
-    private int height;
+
     private int area;
+    private Point[] points = new Point[4];
 
     Rect(int w, int h){
-        this.width = w;
-        this.height = h;
         this.area = w * h;
-    }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+        points[0] = new Point(0, 0);
+        points[1] = new Point(w, 0);
+        points[2] = new Point(0, h);
+        points[3] = new Point(w, h);
     }
 
     public int getArea() {
         return area;
+    }
+
+    public Point[] getPoints() {
+        return points;
+    }
+}
+
+class Point{
+    private int x;
+    private int y;
+
+    Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public String toString(){
+        return "(" + x + "," + y + ")";
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
