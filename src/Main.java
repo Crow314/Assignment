@@ -11,8 +11,10 @@ public class Main {
 
         int[] daysOfMonth = {31, checkLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
+        CalDate calDate = new CalDate(year, month, 0);
+
         for(int i=0; i<daysOfMonth[month-1]; i++){
-            CalDate calDate = new CalDate(year, month, i+1);
+            calDate.change(year, month, i+1);
             System.out.println(calDate.getYear() + "/" + calDate.getMonth() + "/" + calDate.getDay() + "(" + calDate.getDayOfWeek() + ")");
         }
 
@@ -35,7 +37,10 @@ class CalDate{
     public static final String[] DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     CalDate(int year, int month, int day){
+        this.change(year, month, day);
+    }
 
+    public void  change(int year, int month, int day){
         this.year = year;
         this.month = month;
         this.day = day;
