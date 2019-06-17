@@ -17,6 +17,7 @@ public class Main {
         for(int i=0; i<daysOfMonth[month-1]; i++){
             calDate.change(year, month, i+1);
             CalDate copy = new CalDate(calDate);
+            System.out.println(calDate);
             if(!calDate.isSameWith(copy)){
                 System.out.println("Error");
                 errCount++;

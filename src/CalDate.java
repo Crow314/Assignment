@@ -4,8 +4,6 @@ public class CalDate {
     private int day;
     private String dayOfWeek;
 
-    public static final String[] DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-
     CalDate(int year, int month, int day){
         this.change(year, month, day);
     }
@@ -18,6 +16,11 @@ public class CalDate {
         this.year = year;
         this.month = month;
         this.day = day;
+        this.dayOfWeek = zeller(year, month, day);
+    }
+
+    private String zeller(int year, int month, int day){
+        final String[] DAY_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
         //1月を前年の13月, 2月を前年の14月として計算する
         if(month == 1 || month == 2){
@@ -26,8 +29,7 @@ public class CalDate {
         }
 
         int dayOfWeek_int = (year + year/4 - year/100 + year/400 + (13 * month + 8)/5 + day) % 7;
-        this.dayOfWeek = DAY_OF_WEEK[dayOfWeek_int];
-
+        return DAY_OF_WEEK[dayOfWeek_int];
     }
 
     public boolean isSameWith(CalDate d){
@@ -35,6 +37,11 @@ public class CalDate {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString(){
+        return this.getYear() + "/" + this.getMonth() + "/" + this.getDay() + "(" + this.dayOfWeek + ")";
     }
 
     public int getYear() {
