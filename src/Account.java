@@ -30,4 +30,16 @@ public class Account {
     public String toString(){
         return name + "(" + no + ") :" + balance;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNo() {
+        return no;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
 }
