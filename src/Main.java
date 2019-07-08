@@ -1,53 +1,27 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Animal");
-        Animal a = new Animal(80);
-        System.out.println("start " + a);
-        a.walk();
-        System.out.println("walk " + a);
-        a.eat();
-        System.out.println("eat " + a);
-        ////////////////////////////////////
 
-        System.out.println();
-        System.out.println("Human");
-        Human h = new Human(60);
-        System.out.println("start " + h);
-        h.walk();
-        System.out.println("walk " + h);
-        h.eat();
-        System.out.println("eat " + h);
-        h.rideOn();
-        h.drive();
-        System.out.println("ride on and drive " + h);
-        h.getDown();
-        h.drive();
-        System.out.println("get down and drive " + h);
-        ////////////////////////////////////
+        Animal[] list = new Animal[4];
+        list[0] = new Bird(50);
+        list[1] = new Penguin(50);
+        list[2] = new Human(50);
+        list[3] = new CarDriver(50);
 
-        System.out.println();
-        System.out.println("Bird");
-        Bird b = new Bird(50);
-        System.out.println("start " + b);
-        b.walk();
-        System.out.println("walk " + b);
-        b.eat();
-        System.out.println("eat " + b);
-        b.fly();
-        System.out.println("fly " + b);
-        ////////////////////////////////////
+        for(int i=0; i<list.length; i++) {
+            list[i].walk();
+            System.out.println("walk " + list[i]);
 
-        System.out.println();
-        System.out.println("Migrant Bird");
-        MigrantBird m = new MigrantBird(100);
-        System.out.println("start " + m);
-        m.walk();
-        System.out.println("walk " + m);
-        m.eat();
-        System.out.println("eat " + m);
-        m.fly();
-        System.out.println("fly " + m);
-        m.sleep();
-        System.out.println("sleep " + m);
+            if(list[i] instanceof Bird) {
+                Bird b = (Bird)list[i];
+                b.fly();
+                System.out.println("fly " + b);
+            }
+
+            if(list[i] instanceof Human) {
+                Human h = (Human)list[i];
+                h.drive();
+                System.out.println("drive " + h);
+            }
+        }
     }
 }
