@@ -58,4 +58,19 @@ public class Character {
         return name + "(" + job + ":" + (isMale?"M":"F") + ") LV" + level + "[" + hp + "/" + mp + "]" + status;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getMp() {
+        return mp;
+    }
 }
