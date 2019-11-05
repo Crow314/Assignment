@@ -2,16 +2,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner consoleIn = new Scanner(System.in);
 
         File file = new File(consoleIn.next());
-        int statusCode = consoleIn.nextInt();
 
         consoleIn.close();
+
+        Map<String, Integer> accessCount = new HashMap<>();
 
         try(
                 FileReader fr = new FileReader(file);
@@ -19,24 +20,33 @@ public class Main {
                 ) {
             String str = br.readLine();
 
-            int count = 0;
-
             while (str != null){
-                /*
                 String[] strArray = str.split(" ");
-                if(strArray[8].equals(Integer.toString(statusCode))){
-                    count++;
+                String tmpAddress = strArray[0];
+
+                Integer count = accessCount.get(tmpAddress);
+
+                if(count == null){
+                    count = 0;
                 }
-                 */
-                if(str.matches("^.+ .+ .+ \\[.+\\] \".+\" " + statusCode + " .+ .*$")){
-                    count++;
-                }
+
+                count++;
+
+                accessCount.put(tmpAddress, count);
+
                 str = br.readLine();
             }
 
-            System.out.println(count);
         }catch (IOException e){
             System.out.println("File: " + file.getName() + " not found.");
+        }
+
+        List<String> addressList = new ArrayList<>(accessCount.keySet());
+        addressList.sort(null);
+
+        for(String tmpAddress : addressList){
+            int count = accessCount.get(tmpAddress);
+            System.out.println(tmpAddress + ": " + count + " time(s)");
         }
     }
 }
