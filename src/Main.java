@@ -9,6 +9,7 @@ public class Main {
         Scanner consoleIn = new Scanner(System.in);
 
         File file = new File(consoleIn.next());
+        int statusCode = consoleIn.nextInt();
 
         consoleIn.close();
 
@@ -18,20 +19,22 @@ public class Main {
                 ) {
             String str = br.readLine();
 
-            while (str != null){
-                char[] str_char = str.toCharArray();
-                for(char c : str_char){
-                    if(c >= 0x41 && c <= 0x5A){
-                        c += 0x20;
-                    }else if(c >= 0x61 && c <= 0x7A){
-                        c -= 0x20;
-                    }
+            int count = 0;
 
-                    System.out.print(c);
+            while (str != null){
+                /*
+                String[] strArray = str.split(" ");
+                if(strArray[8].equals(Integer.toString(statusCode))){
+                    count++;
                 }
-                System.out.println();
+                 */
+                if(str.matches("^.+ .+ .+ \\[.+\\] \".+\" " + statusCode + " .+ .*$")){
+                    count++;
+                }
                 str = br.readLine();
             }
+
+            System.out.println(count);
         }catch (IOException e){
             System.out.println("File: " + file.getName() + " not found.");
         }
