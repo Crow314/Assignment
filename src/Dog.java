@@ -1,5 +1,7 @@
 public class Dog extends Thread {
 
+    private static int goalCount = 1;
+
     private String name;
     private double stepLength;
     private int stepInterval;
@@ -50,7 +52,8 @@ public class Dog extends Thread {
             }
         }
 
-        System.out.println(name + "がゴール!!");
+        System.out.println(name + "が" + goalCount + "位でゴール!!");
+        goalCount++;
     }
 
 }
