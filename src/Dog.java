@@ -20,7 +20,7 @@ public class Dog extends Thread {
         int checkPointCount = 0;
         int remainGrateStatus = 0;
 
-        while (distance < goalDistance){
+        while (true){
             if(remainGrateStatus>0){
                 distance += stepLength*2;
                 remainGrateStatus--;
@@ -32,17 +32,16 @@ public class Dog extends Thread {
                 distance += stepLength;
             }
 
-            if(checkPointCount<checkPoint.length){
-                if(distance >= checkPoint[checkPointCount]){
-                    System.out.println(name + "が" + checkPoint[checkPointCount] + "mに到達!");
-                    checkPointCount++;
-                }
-            }
+            checkPointCount = checkPoint(distance, checkPoint, checkPointCount);
 
             int random = (int)(Math.random() * 100);
             if(random == 0 && remainGrateStatus == 0){
                 remainGrateStatus = 10;
                 System.out.println(name + "は絶好調!!");
+            }
+
+            if (distance >= goalDistance){
+                break;
             }
 
             try {
@@ -56,4 +55,14 @@ public class Dog extends Thread {
         goalCount++;
     }
 
+    public int checkPoint(double distance, int[] checkPoint, int checkPointCount) {
+        if(checkPointCount<checkPoint.length){
+            if(distance >= checkPoint[checkPointCount]){
+                System.out.println(name + "が" + checkPoint[checkPointCount] + "mに到達!");
+                checkPointCount++;
+                checkPointCount = checkPoint(distance, checkPoint, checkPointCount);
+            }
+        }
+        return checkPointCount;
+    }
 }
