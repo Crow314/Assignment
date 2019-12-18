@@ -1,15 +1,17 @@
 public class Dog extends Thread {
 
-    private static int goalCount = 1;
+    //private static int goalCount = 1;
 
     private String name;
     private double stepLength;
     private int stepInterval;
+    private RaceManager raceManager;
 
-    public Dog(String name, double stepLength, int stepInterval){
+    public Dog(String name, double stepLength, int stepInterval, RaceManager raceManager){
         this.name = name;
         this.stepLength = stepLength;
         this.stepInterval = stepInterval;
+        this.raceManager = raceManager;
     }
 
     @Override
@@ -51,13 +53,15 @@ public class Dog extends Thread {
             }
         }
 
-        System.out.println(name + "が" + goalCount + "位でゴール!!");
-        try {
-            Thread.sleep(500); //Conflict
-        }catch (InterruptedException e){
-            e.printStackTrace();
+        synchronized (raceManager){
+            System.out.println(name + "が" + raceManager.getGoalCount() + "位でゴール!!");
+            try {
+                Thread.sleep(500); //Conflict
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            raceManager.countUp();
         }
-        goalCount++;
     }
 
     public int checkPoint(double distance, int[] checkPoint, int checkPointCount) {
