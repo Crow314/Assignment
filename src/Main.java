@@ -6,13 +6,13 @@ public class Main {
 
         Dog[] dogs = new Dog[4];
 
+        System.out.print("Input step length of the dog. :");
+        double tmpStepLength = sc.nextDouble(); //Large number as soon as possible.
+        System.out.print("Input step interval of the dog. :");
+        int tmpStepInterval = sc.nextInt(); //Small number as soon as possible.
         for(int i=0; i<dogs.length; i++){
             System.out.print("Input name of the dog. :");
             String tmpName = sc.next();
-            System.out.print("Input step length of the dog. :");
-            double tmpStepLength = sc.nextDouble();
-            System.out.print("Input step interval of the dog. :");
-            int tmpStepInterval = sc.nextInt();
             dogs[i] = new Dog(tmpName, tmpStepLength, tmpStepInterval);
         }
 

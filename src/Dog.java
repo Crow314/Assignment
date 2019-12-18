@@ -52,6 +52,11 @@ public class Dog extends Thread {
         }
 
         System.out.println(name + "が" + goalCount + "位でゴール!!");
+        try {
+            Thread.sleep(500); //Conflict
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
         goalCount++;
     }
 
