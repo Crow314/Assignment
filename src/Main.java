@@ -1,6 +1,8 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,49 +12,38 @@ public class Main {
         frame.setLayout(null);
         frame.setResizable(false);
 
-        JLabel countLabel = new JLabel("0");
-        countLabel.setBounds(90, 10, 20, 28);
+        int initValue = 50;
+
+        JLabel countLabel = new JLabel(Integer.toString(initValue));
+        countLabel.setBounds(80, 10, 40, 28);
+        countLabel.setHorizontalAlignment(JLabel.CENTER);
         frame.add(countLabel);
 
-        JButton minusButton = new JButton("-1");
-        minusButton.setSize(80, 28);
-        minusButton.setLocation(10, 50);
-        frame.add(minusButton);
-        minusButton.addActionListener(new ActionListener() {
-            JLabel mLabel;
+        JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL, initValue, 10, 0, 110);
+        scrollBar.setBounds(20, 50, 160, 30);
+        frame.add(scrollBar);
+
+        JLabel graph = new JLabel();
+        graph.setBounds(20, 100, (int)(160*((double)initValue/100)), 28);
+        graph.setBorder(new LineBorder(Color.BLACK, 1, false));
+        frame.add(graph);
+
+        scrollBar.addAdjustmentListener(new AdjustmentListener() {
+            JLabel mCount;
+            JLabel mGraph;
 
             @Override
-            public void actionPerformed(ActionEvent e) {
-                int count = Integer.parseInt(mLabel.getText());
-                count--;
-                mLabel.setText(Integer.toString(count));
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                mCount.setText(Integer.toString(e.getValue()));
+                graph.setBounds(20, 100, (int)(160*((double)e.getValue()/100)), 28);
             }
 
-            public ActionListener setParam(JLabel label){
-                mLabel = label;
+            public AdjustmentListener setParam(JLabel count, JLabel graph){
+                mCount = count;
+                mGraph = graph;
                 return this;
             }
-        }.setParam(countLabel));
-
-        JButton plusButton = new JButton("+1");
-        plusButton.setSize(80, 28);
-        plusButton.setLocation(100, 50);
-        frame.add(plusButton);
-        plusButton.addActionListener(new ActionListener() {
-            JLabel mLabel;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int count = Integer.parseInt(mLabel.getText());
-                count++;
-                mLabel.setText(Integer.toString(count));
-            }
-
-            public ActionListener setParam(JLabel label){
-                mLabel = label;
-                return this;
-            }
-        }.setParam(countLabel));
+        }.setParam(countLabel, graph));
 
         frame.setVisible(true);
     }
