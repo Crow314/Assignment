@@ -10,9 +10,7 @@ public class Main {
         frame.setLayout(null);
         frame.setResizable(false);
 
-        int[] count = {0};
-
-        JLabel countLabel = new JLabel(Integer.toString(count[0]));
+        JLabel countLabel = new JLabel("0");
         countLabel.setBounds(90, 10, 20, 28);
         frame.add(countLabel);
 
@@ -22,21 +20,19 @@ public class Main {
         frame.add(minusButton);
         minusButton.addActionListener(new ActionListener() {
             JLabel mLabel;
-            int[] mCount;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.err.println("- : " + mCount[0]);
-                mCount[0]--;
-                mLabel.setText(Integer.toString(mCount[0]));
+                int count = Integer.parseInt(mLabel.getText());
+                count--;
+                mLabel.setText(Integer.toString(count));
             }
 
-            public ActionListener setParam(JLabel label, int[] count){
+            public ActionListener setParam(JLabel label){
                 mLabel = label;
-                mCount = count;
                 return this;
             }
-        }.setParam(countLabel, count));
+        }.setParam(countLabel));
 
         JButton plusButton = new JButton("+1");
         plusButton.setSize(80, 28);
@@ -44,21 +40,19 @@ public class Main {
         frame.add(plusButton);
         plusButton.addActionListener(new ActionListener() {
             JLabel mLabel;
-            int[] mCount;
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.err.println("+ : " + mCount[0]);
-                mCount[0]++;
-                mLabel.setText(Integer.toString(mCount[0]));
+                int count = Integer.parseInt(mLabel.getText());
+                count++;
+                mLabel.setText(Integer.toString(count));
             }
 
-            public ActionListener setParam(JLabel label, int[] count){
+            public ActionListener setParam(JLabel label){
                 mLabel = label;
-                mCount = count;
                 return this;
             }
-        }.setParam(countLabel, count));
+        }.setParam(countLabel));
 
         frame.setVisible(true);
     }
