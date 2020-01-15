@@ -1,50 +1,59 @@
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("加減算器");
-        frame.setSize(200, 200);
+        JFrame frame = new JFrame("えむえすぺいんと");
+        frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
+        frame.setVisible(true);
 
-        int initValue = 50;
+        Graphics graphics = frame.getGraphics();
 
-        JLabel countLabel = new JLabel(Integer.toString(initValue));
-        countLabel.setBounds(80, 10, 40, 28);
-        countLabel.setHorizontalAlignment(JLabel.CENTER);
-        frame.add(countLabel);
+        MouseInputListener mouseEvListener = new MouseEvListener(frame, graphics);
 
-        JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL, initValue, 10, 0, 110);
-        scrollBar.setBounds(20, 50, 160, 30);
-        frame.add(scrollBar);
-
-        JLabel graph = new JLabel();
-        graph.setBounds(20, 100, (int)(160*((double)initValue/100)), 28);
-        graph.setBorder(new LineBorder(Color.BLACK, 1, false));
-        frame.add(graph);
-
-        scrollBar.addAdjustmentListener(new AdjustmentListener() {
-            JLabel mCount;
-            JLabel mGraph;
+        JButton blackButton = new JButton("black");
+        blackButton.setSize(80, 28);
+        blackButton.setLocation(20, 400);
+        frame.add(blackButton);
+        blackButton.addActionListener(new ActionListener() {
+            Graphics graphics;
 
             @Override
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                mCount.setText(Integer.toString(e.getValue()));
-                graph.setBounds(20, 100, (int)(160*((double)e.getValue()/100)), 28);
+            public void actionPerformed(ActionEvent e) {
+                graphics.setColor(new Color(0, 0, 0));
             }
 
-            public AdjustmentListener setParam(JLabel count, JLabel graph){
-                mCount = count;
-                mGraph = graph;
+            public ActionListener setParam(Graphics graphics){
+                this.graphics = graphics;
                 return this;
             }
-        }.setParam(countLabel, graph));
+        }.setParam(graphics));
 
-        frame.setVisible(true);
+        JButton redButton = new JButton("red");
+        redButton.setSize(80, 28);
+        redButton.setLocation(120, 400);
+        frame.add(redButton);
+        redButton.addActionListener(new ActionListener() {
+            Graphics graphics;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                graphics.setColor(new Color(255, 0, 0));
+            }
+
+            public ActionListener setParam(Graphics graphics){
+                this.graphics = graphics;
+                return this;
+            }
+        }.setParam(graphics));
+
+        frame.addMouseListener(mouseEvListener);
+        frame.addMouseMotionListener(mouseEvListener);
     }
 }
