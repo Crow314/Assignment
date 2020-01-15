@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,45 +14,57 @@ public class Main {
 
         Graphics graphics = frame.getGraphics();
 
-        MouseInputListener mouseEvListener = new MouseEvListener(frame, graphics);
+        frame.setVisible(false);
+
+        MouseEvListener mouseEvListener = new MouseEvListener(frame, graphics);
 
         JButton blackButton = new JButton("black");
         blackButton.setSize(80, 28);
         blackButton.setLocation(20, 400);
         frame.add(blackButton);
         blackButton.addActionListener(new ActionListener() {
-            Graphics graphics;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 graphics.setColor(new Color(0, 0, 0));
             }
-
-            public ActionListener setParam(Graphics graphics){
-                this.graphics = graphics;
-                return this;
-            }
-        }.setParam(graphics));
+        });
 
         JButton redButton = new JButton("red");
         redButton.setSize(80, 28);
         redButton.setLocation(120, 400);
         frame.add(redButton);
         redButton.addActionListener(new ActionListener() {
-            Graphics graphics;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 graphics.setColor(new Color(255, 0, 0));
             }
-
-            public ActionListener setParam(Graphics graphics){
-                this.graphics = graphics;
-                return this;
-            }
-        }.setParam(graphics));
+        });
 
         frame.addMouseListener(mouseEvListener);
         frame.addMouseMotionListener(mouseEvListener);
+
+        JButton lineButton = new JButton("line");
+        lineButton.setSize(80, 28);
+        lineButton.setLocation(300, 400);
+        frame.add(lineButton);
+        lineButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mouseEvListener.setMode(MouseEvListener.MODE_LINE);
+            }
+        });
+
+        JButton triangleButton = new JButton("triangle");
+        triangleButton.setSize(80, 28);
+        triangleButton.setLocation(400, 400);
+        frame.add(triangleButton);
+        triangleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mouseEvListener.setMode(MouseEvListener.MODE_TRIANGLE);
+            }
+        });
+
+        frame.setVisible(true);
     }
 }
