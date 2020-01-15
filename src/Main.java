@@ -15,6 +15,8 @@ public class Main {
 
         Graphics graphics = frame.getGraphics();
 
+        frame.setVisible(false);
+
         MouseInputListener mouseEvListener = new MouseEvListener(frame, graphics);
 
         JButton blackButton = new JButton("black");
@@ -55,5 +57,7 @@ public class Main {
 
         frame.addMouseListener(mouseEvListener);
         frame.addMouseMotionListener(mouseEvListener);
+
+        frame.setVisible(true);
     }
 }
