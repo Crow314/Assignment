@@ -12,6 +12,7 @@ public class MouseEvListener implements MouseInputListener {
     private Graphics graphics;
     private int mode;
     private MouseEvent[] clickEventLog;
+    private MouseEvent dragLastEvent;
 
     MouseEvListener(JFrame frame, Graphics graphics){
         this.frame = frame;
@@ -69,6 +70,7 @@ public class MouseEvListener implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        dragLastEvent = null;
         graphics.fillOval(e.getX(), e.getY(), 2, 2);
     }
 
@@ -89,7 +91,10 @@ public class MouseEvListener implements MouseInputListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        graphics.fillOval(e.getX(), e.getY(), 2, 2);
+        if(dragLastEvent != null){
+            drawLine(dragLastEvent, e);
+        }
+        dragLastEvent = e;
     }
 
     @Override
