@@ -1,21 +1,22 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("えむえすぺいんと");
-        int windowWidth = 1440;
-        int windowHeight = 810;
-        int sideMenuWidth = 250;
-        frame.setSize(windowWidth, windowHeight);
+        JMenuBar menuBar = new JMenuBar();
+
+        int canvasWidth = 1440;
+        int canvasHeight = 810;
+        int toolBoxWidth = 300;
+        frame.setSize(canvasWidth + toolBoxWidth, canvasHeight + menuBar.getHeight());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
 
-        JMenuBar menuBar = new JMenuBar();
-
-        //ColorMenu
+        // ColorMenu
         JMenu colorMenu = new JMenu("Color");
         ButtonGroup colorChoiceGroup = new ButtonGroup();
         List<JMenuItem> colorMenuItems = new ArrayList<>();
@@ -31,6 +32,7 @@ public class Main {
         }
         menuBar.add(colorMenu);
 
+        // ThicknessMenu
         JMenu thicknessMenu = new JMenu("Thickness");
         ButtonGroup thicknessChoiceGroup = new ButtonGroup();
         List<JMenuItem> thicknessMenuItems = new ArrayList<>();
@@ -46,29 +48,46 @@ public class Main {
 
         frame.setJMenuBar(menuBar);
 
-        JPanel panel = new JPanel();
-        //panel.setSize(new Dimension(windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight()));
-        panel.setBounds(0, menuBar.getHeight(), windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight());
-        frame.getContentPane().add(panel);
+        // Canvas
+        JPanel paintPanel = new JPanel();
+        paintPanel.setBounds(0, menuBar.getHeight(), canvasWidth, canvasHeight);
+        frame.getContentPane().add(paintPanel);
 
-        PaintCanvas canvas = new PaintCanvas(windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight());
-        panel.add(canvas);
+        PaintCanvas canvas = new PaintCanvas(canvasWidth, canvasHeight);
+        paintPanel.add(canvas);
+
+        // ToolBox
+        JPanel toolBoxPanel = new JPanel();
+        toolBoxPanel.setBounds(canvasWidth, menuBar.getHeight(), toolBoxWidth, canvasHeight);
+        toolBoxPanel.setLayout(new FlowLayout());
+        frame.getContentPane().add(toolBoxPanel);
+
+        String[] modeComboData = {"Pen", "Line", "Triangle"};
+        JComboBox<String> modeComboBox = new JComboBox<>(modeComboData);
+        modeComboBox.setPreferredSize(new Dimension(toolBoxWidth, 60));
+        toolBoxPanel.add(modeComboBox);
+
 
         frame.setVisible(true);
 
         for(JMenuItem menuItem : colorMenuItems){
-            menuItem.addActionListener(e -> {
-                JMenuItem sourceItem = (JMenuItem) e.getSource();
+            menuItem.addActionListener(actionEvent -> {
+                JMenuItem sourceItem = (JMenuItem) actionEvent.getSource();
                 canvas.setStrokeColor(sourceItem.getText());
             });
         }
 
         for(JMenuItem menuItem : thicknessMenuItems){
-            menuItem.addActionListener(e -> {
-                JMenuItem sourceItem = (JMenuItem) e.getSource();
+            menuItem.addActionListener(actionEvent -> {
+                JMenuItem sourceItem = (JMenuItem) actionEvent.getSource();
                 canvas.setStrokeThickness(sourceItem.getText());
             });
         }
+
+        modeComboBox.addActionListener(actionEvent -> {
+            JComboBox<String> sourceComboBox = (JComboBox<String>) actionEvent.getSource();
+            canvas.setMode(sourceComboBox.getItemAt(sourceComboBox.getSelectedIndex()));
+        });
 
     }
 }

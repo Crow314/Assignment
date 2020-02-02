@@ -4,9 +4,10 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class PaintCanvas extends Canvas implements MouseInputListener {
-    public static final int MODE_DRAW = 0;
+    public static final int MODE_PEN = 0;
     public static final int MODE_LINE = 1;
     public static final int MODE_TRIANGLE = 2;
+    public static final int MODE_MAX = MODE_TRIANGLE;
 
     private int canvasWidth;
     private int canvasHeight;
@@ -30,7 +31,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.g2d = (Graphics2D) bufferedImage.getGraphics();
         this.setStrokeColor("Black");
         this.setStrokeThickness("Regular");
-        this.mode = MODE_DRAW;
+        this.mode = MODE_PEN;
 
         this.setBackground(BGColor);
         this.setPreferredSize(new Dimension(canvasWidth, canvasHeight));
@@ -54,7 +55,11 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void drawLine(Point pos1, Point pos2){
+        BasicStroke stroke = new BasicStroke(strokeThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        g2d.setStroke(stroke);
+        g2d.setColor(strokeColor);
         g2d.drawLine((int)pos1.getX(), (int)pos1.getY(), (int)pos2.getX(), (int)pos2.getY());
+        repaint();
     }
 
     public void drawTriangle(Point pos1, Point pos2, Point pos3){
@@ -118,6 +123,24 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         return thickness;
     }
 
+    public int parseMode(String modeName){
+        int mode = 0;
+        switch (modeName){
+            case "Pen":
+                mode = MODE_PEN;
+                break;
+
+            case "Line":
+                mode = MODE_LINE;
+                break;
+
+            case "Triangle":
+                mode = MODE_TRIANGLE;
+                break;
+        }
+        return mode;
+    }
+
     public void setStrokeColor(Color color) {
         this.strokeColor = color;
     }
@@ -127,22 +150,48 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void setStrokeThickness(int thickness) {
-        this.strokeThickness = thickness;
+        if(thickness > 0){
+            this.strokeThickness = thickness;
+        }
     }
 
     public void setStrokeThickness(String thickness) {
         setStrokeThickness(parseThickness(thickness));
     }
 
+    public void setMode(int mode){
+        if(mode >= 0 && mode <= MODE_MAX){
+            this.mode = mode;
+        }
+        clearPos();
+    }
+
+    public void setMode(String mode){
+        setMode(parseMode(mode));
+    }
+
     public void setCurrentPos(Point pos) {
         this.lastPos = currentPos;
-        this.currentPos = pos;
+        this.currentPos = (Point) pos.clone();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if(mode == MODE_PEN){
+            clearPos();
+            g2d.fillOval(e.getX(), e.getY(), 2, 2);
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
         switch (mode){
-            case MODE_DRAW:
+            case MODE_PEN:
                 break;
 
             case MODE_LINE:
@@ -163,18 +212,6 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
                 }
                 break;
         }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if(mode == MODE_DRAW){
-            clearPos();
-            g2d.fillOval(e.getX(), e.getY(), 2, 2);
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
 
     }
 
@@ -190,20 +227,17 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (mode == MODE_DRAW){
+        if (mode == MODE_PEN){
             setCurrentPos(e.getPoint());
 
             if (currentPos != null && lastPos != null) {
-                BasicStroke stroke = new BasicStroke(strokeThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-                g2d.setStroke(stroke);
-                g2d.setColor(strokeColor);
-                this.drawLine(lastPos, currentPos);
+                drawLine(lastPos, currentPos);
             }
-            repaint();
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
     }
 }
