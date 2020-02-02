@@ -1,70 +1,74 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("えむえすぺいんと");
-        frame.setSize(500, 500);
+        int windowWidth = 1440;
+        int windowHeight = 810;
+        int sideMenuWidth = 250;
+        frame.setSize(windowWidth, windowHeight);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
 
-        JButton blackButton = new JButton("black");
-        blackButton.setSize(80, 28);
-        blackButton.setLocation(20, 400);
-        frame.add(blackButton);
+        JMenuBar menuBar = new JMenuBar();
 
-        JButton redButton = new JButton("red");
-        redButton.setSize(80, 28);
-        redButton.setLocation(120, 400);
-        frame.add(redButton);
+        //ColorMenu
+        JMenu colorMenu = new JMenu("Color");
+        ButtonGroup colorChoiceGroup = new ButtonGroup();
+        List<JMenuItem> colorMenuItems = new ArrayList<>();
+        colorMenuItems.add(new JRadioButtonMenuItem("Black"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Red"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Blue"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Yellow"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Green"));
+        colorMenuItems.get(0).setSelected(true);
+        for(JMenuItem menuItem : colorMenuItems){
+            colorChoiceGroup.add(menuItem);
+            colorMenu.add(menuItem);
+        }
+        menuBar.add(colorMenu);
 
-        JButton lineButton = new JButton("line");
-        lineButton.setSize(80, 28);
-        lineButton.setLocation(300, 400);
-        frame.add(lineButton);
+        JMenu thicknessMenu = new JMenu("Thickness");
+        ButtonGroup thicknessChoiceGroup = new ButtonGroup();
+        List<JMenuItem> thicknessMenuItems = new ArrayList<>();
+        thicknessMenuItems.add(new JRadioButtonMenuItem("Thin"));
+        thicknessMenuItems.add(new JRadioButtonMenuItem("Regular"));
+        thicknessMenuItems.add(new JRadioButtonMenuItem("Thick"));
+        thicknessMenuItems.get(1).setSelected(true);
+        for(JMenuItem menuItem : thicknessMenuItems){
+            thicknessChoiceGroup.add(menuItem);
+            thicknessMenu.add(menuItem);
+        }
+        menuBar.add(thicknessMenu);
 
-        JButton triangleButton = new JButton("triangle");
-        triangleButton.setSize(80, 28);
-        triangleButton.setLocation(400, 400);
-        frame.add(triangleButton);
+        frame.setJMenuBar(menuBar);
+
+        JPanel panel = new JPanel();
+        //panel.setSize(new Dimension(windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight()));
+        panel.setBounds(0, menuBar.getHeight(), windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight());
+        frame.getContentPane().add(panel);
+
+        PaintCanvas canvas = new PaintCanvas(windowWidth - sideMenuWidth, windowHeight - menuBar.getHeight());
+        panel.add(canvas);
 
         frame.setVisible(true);
 
-        Graphics graphics = frame.getGraphics();
+        for(JMenuItem menuItem : colorMenuItems){
+            menuItem.addActionListener(e -> {
+                JMenuItem sourceItem = (JMenuItem) e.getSource();
+                canvas.setStrokeColor(sourceItem.getText());
+            });
+        }
 
-        MouseEvListener mouseEvListener = new MouseEvListener(frame, graphics);
-        frame.addMouseListener(mouseEvListener);
-        frame.addMouseMotionListener(mouseEvListener);
+        for(JMenuItem menuItem : thicknessMenuItems){
+            menuItem.addActionListener(e -> {
+                JMenuItem sourceItem = (JMenuItem) e.getSource();
+                canvas.setStrokeThickness(sourceItem.getText());
+            });
+        }
 
-        blackButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                graphics.setColor(new Color(0, 0, 0));
-            }
-        });
-
-        redButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                graphics.setColor(new Color(255, 0, 0));
-            }
-        });
-
-        lineButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mouseEvListener.setMode(MouseEvListener.MODE_LINE);
-            }
-        });
-
-        triangleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mouseEvListener.setMode(MouseEvListener.MODE_TRIANGLE);
-            }
-        });
     }
 }
