@@ -94,7 +94,7 @@ public class Main {
             canvas.setMode(sourceComboBox.getItemAt(sourceComboBox.getSelectedIndex()));
         });
 
-
+        clearButton.addActionListener(actionEvent -> canvas.clear());
 
     }
 }
