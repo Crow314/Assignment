@@ -18,6 +18,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
     private Color strokeColor;
     private int strokeThickness;
+    private boolean rainbowColor;
 
     private Point currentPos = null;
     private Point lastPos = null;
@@ -31,6 +32,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.g2d = (Graphics2D) bufferedImage.getGraphics();
         this.setStrokeColor("Black");
         this.setStrokeThickness("Regular");
+        this.rainbowColor = false;
         this.mode = MODE_PEN;
 
         this.setBackground(BGColor);
@@ -146,7 +148,13 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void setStrokeColor(String color) {
-        setStrokeColor(parseColor(color));
+        if (color.equals("Rainbow")) {
+            rainbowColor = true;
+            setStrokeColor(Color.getHSBColor(0.0F, 1.0F, 1.0F));
+        }else {
+            rainbowColor = false;
+            setStrokeColor(parseColor(color));
+        }
     }
 
     public void setStrokeThickness(int thickness) {
@@ -232,6 +240,11 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
             if (currentPos != null && lastPos != null) {
                 drawLine(lastPos, currentPos);
+            }
+
+            if (rainbowColor){
+                float[] hsb = Color.RGBtoHSB(strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), null);
+                setStrokeColor(Color.getHSBColor(hsb[0] + 0.01F, hsb[1], hsb[2]));
             }
         }
     }

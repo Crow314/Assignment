@@ -25,6 +25,7 @@ public class Main {
         colorMenuItems.add(new JRadioButtonMenuItem("Blue"));
         colorMenuItems.add(new JRadioButtonMenuItem("Yellow"));
         colorMenuItems.add(new JRadioButtonMenuItem("Green"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Rainbow"));
         colorMenuItems.get(0).setSelected(true);
         for(JMenuItem menuItem : colorMenuItems){
             colorChoiceGroup.add(menuItem);
@@ -64,8 +65,11 @@ public class Main {
 
         String[] modeComboData = {"Pen", "Line", "Triangle"};
         JComboBox<String> modeComboBox = new JComboBox<>(modeComboData);
-        modeComboBox.setPreferredSize(new Dimension(toolBoxWidth, 60));
+        modeComboBox.setPreferredSize(new Dimension(toolBoxWidth, 40));
         toolBoxPanel.add(modeComboBox);
+
+        JButton clearButton = new JButton("CLEAR");
+        toolBoxPanel.add(clearButton);
 
 
         frame.setVisible(true);
@@ -85,9 +89,12 @@ public class Main {
         }
 
         modeComboBox.addActionListener(actionEvent -> {
+            @SuppressWarnings("unchecked")
             JComboBox<String> sourceComboBox = (JComboBox<String>) actionEvent.getSource();
             canvas.setMode(sourceComboBox.getItemAt(sourceComboBox.getSelectedIndex()));
         });
+
+
 
     }
 }
