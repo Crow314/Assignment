@@ -7,7 +7,8 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public static final int MODE_PEN = 0;
     public static final int MODE_LINE = 1;
     public static final int MODE_TRIANGLE = 2;
-    public static final int MODE_MAX = MODE_TRIANGLE;
+    public static final int MODE_CHARACTER = 3;
+    public static final int MODE_MAX = MODE_CHARACTER;
 
     private int canvasWidth;
     private int canvasHeight;
@@ -15,6 +16,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
     private BufferedImage bufferedImage;
     private Graphics2D g2d;
+    private CharacterInputFrame characterInputFrame;
 
     private Color strokeColor;
     private int strokeThickness;
@@ -30,6 +32,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.BGColor = Color.WHITE;
         this.bufferedImage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB); // 描画内容を保持するBufferedImageを生成
         this.g2d = (Graphics2D) bufferedImage.getGraphics();
+        this.characterInputFrame = new CharacterInputFrame(this);
         this.setStrokeColor("Black");
         this.setStrokeThickness("Regular");
         this.rainbowColor = false;
@@ -40,8 +43,8 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        g2d.setColor(BGColor); //BufferedImageの背景も白にする
-        g2d.fillRect(0, 0, canvasWidth, canvasHeight);
+        g2d.setFont(new Font("Yu Gothic", Font.PLAIN, 80));
+        clear();
 
         repaint(); //描画
     }
@@ -70,9 +73,16 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         drawLine(pos3, pos1);
     }
 
+    public void drawText(Point pos, String text){
+        System.err.println(text + pos);
+        g2d.drawString(text, (int)pos.getX(), (int)pos.getY());
+        repaint();
+    }
+
     public void clear() {
         g2d.setColor(BGColor);
         g2d.fillRect(0, 0, canvasWidth, canvasHeight);
+        g2d.setColor(strokeColor);
         repaint();
     }
 
@@ -139,6 +149,9 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
             case "Triangle":
                 mode = MODE_TRIANGLE;
                 break;
+
+            case "Character":
+                mode = MODE_CHARACTER;
         }
         return mode;
     }
@@ -218,6 +231,11 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
                 }else {
                     setCurrentPos(e.getPoint());
                 }
+                break;
+
+            case MODE_CHARACTER:
+                characterInputFrame.setPosition(e.getPoint());
+                characterInputFrame.setVisible(true);
                 break;
         }
 
