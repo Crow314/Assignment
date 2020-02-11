@@ -69,13 +69,17 @@ public class Main {
         // ToolBox
         JPanel toolBoxPanel = new JPanel();
         toolBoxPanel.setBounds(canvasWidth, menuBar.getHeight(), toolBoxWidth, canvasHeight);
-        toolBoxPanel.setLayout(new FlowLayout());
+        toolBoxPanel.setLayout(new BoxLayout(toolBoxPanel, BoxLayout.Y_AXIS));
         frame.getContentPane().add(toolBoxPanel);
 
         String[] modeComboData = {"Pen", "Line", "Triangle", "Character", "Eraser", "Star Stamp"};
         JComboBox<String> modeComboBox = new JComboBox<>(modeComboData);
-        modeComboBox.setPreferredSize(new Dimension(toolBoxWidth, 40));
+        modeComboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         toolBoxPanel.add(modeComboBox);
+
+        JScrollBar thicknessScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, canvas.getStrokeThickness(), 1, 1, 10);
+        thicknessScrollBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        toolBoxPanel.add(thicknessScrollBar);
 
         JButton clearButton = new JButton("CLEAR");
         toolBoxPanel.add(clearButton);
@@ -100,6 +104,7 @@ public class Main {
             menuItem.addActionListener(actionEvent -> {
                 JMenuItem sourceItem = (JMenuItem) actionEvent.getSource();
                 canvas.setStrokeThickness(sourceItem.getText());
+                thicknessScrollBar.setValue(PaintCanvas.parseThickness(sourceItem.getText()));
             });
         }
 
@@ -108,6 +113,8 @@ public class Main {
             JComboBox<String> sourceComboBox = (JComboBox<String>) actionEvent.getSource();
             canvas.setMode(sourceComboBox.getItemAt(sourceComboBox.getSelectedIndex()));
         });
+
+        thicknessScrollBar.addAdjustmentListener(adjustmentEvent -> canvas.setStrokeThickness(adjustmentEvent.getValue()));
 
         clearButton.addActionListener(actionEvent -> canvas.clear());
 

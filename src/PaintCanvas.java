@@ -216,6 +216,10 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         return mode;
     }
 
+    public int getStrokeThickness() {
+        return strokeThickness;
+    }
+
     public void setStrokeColor(Color color) {
         this.strokeColor = color;
     }
