@@ -1,7 +1,11 @@
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class PaintCanvas extends Canvas implements MouseInputListener {
     public static final int MODE_PEN = 0;
@@ -88,6 +92,41 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public void showColorPicker(int mode){
         colorPickerFrame.setMode(mode);
         colorPickerFrame.setVisible(true);
+    }
+
+    public void openImage(){
+        JFileChooser fileChooser = new JFileChooser();
+
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+
+            try{
+                g2d.drawImage(ImageIO.read(file), 0, 0, canvasWidth, canvasHeight, null);
+                g2d.setComposite(AlphaComposite.Src);
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        repaint();
+    }
+
+    public void saveImage(){
+        JFileChooser fileChooser = new JFileChooser();
+
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            File file = fileChooser.getSelectedFile();
+
+            try{
+                ImageIO.write(bufferedImage, "png", file);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void clear() {

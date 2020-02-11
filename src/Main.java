@@ -16,6 +16,14 @@ public class Main {
         frame.setLayout(null);
         frame.setResizable(false);
 
+        // FileMenu
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem openFileItem = new JMenuItem("Open");
+        JMenuItem saveFileItem = new JMenuItem("Save");
+        fileMenu.add(openFileItem);
+        fileMenu.add(saveFileItem);
+        menuBar.add(fileMenu);
+
         // ColorMenu
         JMenu colorMenu = new JMenu("Color");
         ButtonGroup colorChoiceGroup = new ButtonGroup();
@@ -77,6 +85,9 @@ public class Main {
 
 
         frame.setVisible(true);
+
+        openFileItem.addActionListener(actionEvent -> canvas.openImage());
+        saveFileItem.addActionListener(actionEvent -> canvas.saveImage());
 
         for(JMenuItem menuItem : colorMenuItems){
             menuItem.addActionListener(actionEvent -> {
