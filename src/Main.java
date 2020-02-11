@@ -26,6 +26,7 @@ public class Main {
         colorMenuItems.add(new JRadioButtonMenuItem("Yellow"));
         colorMenuItems.add(new JRadioButtonMenuItem("Green"));
         colorMenuItems.add(new JRadioButtonMenuItem("Rainbow"));
+        colorMenuItems.add(new JRadioButtonMenuItem("Select"));
         colorMenuItems.get(0).setSelected(true);
         for(JMenuItem menuItem : colorMenuItems){
             colorChoiceGroup.add(menuItem);
@@ -71,6 +72,9 @@ public class Main {
         JButton clearButton = new JButton("CLEAR");
         toolBoxPanel.add(clearButton);
 
+        JButton changeBGButton = new JButton("Change BG");
+        toolBoxPanel.add(changeBGButton);
+
 
         frame.setVisible(true);
 
@@ -95,6 +99,8 @@ public class Main {
         });
 
         clearButton.addActionListener(actionEvent -> canvas.clear());
+
+        changeBGButton.addActionListener(actionEvent -> canvas.showColorPicker(ColorPickerFrame.MODE_BG_COLOR));
 
     }
 }

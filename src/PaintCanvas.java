@@ -18,6 +18,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     private BufferedImage bufferedImage;
     private Graphics2D g2d;
     private CharacterInputFrame characterInputFrame;
+    private ColorPickerFrame colorPickerFrame;
 
     private Color strokeColor;
     private int strokeThickness;
@@ -34,6 +35,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.bufferedImage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB); // 描画内容を保持するBufferedImageを生成
         this.g2d = (Graphics2D) bufferedImage.getGraphics();
         this.characterInputFrame = new CharacterInputFrame(this);
+        this.colorPickerFrame = new ColorPickerFrame(this);
         this.setStrokeColor("Black");
         this.setStrokeThickness("Regular");
         this.rainbowColor = false;
@@ -81,6 +83,11 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public void drawText(Point pos, String text){
         g2d.drawString(text, (int)pos.getX(), (int)pos.getY());
         repaint();
+    }
+
+    public void showColorPicker(int mode){
+        colorPickerFrame.setMode(mode);
+        colorPickerFrame.setVisible(true);
     }
 
     public void clear() {
@@ -171,12 +178,19 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void setStrokeColor(String color) {
-        if (color.equals("Rainbow")) {
-            rainbowColor = true;
-            setStrokeColor(Color.getHSBColor(0.0F, 1.0F, 1.0F));
-        }else {
-            rainbowColor = false;
-            setStrokeColor(parseColor(color));
+        switch (color){
+            case "Rainbow":
+                rainbowColor = true;
+                setStrokeColor(Color.getHSBColor(0.0F, 1.0F, 1.0F));
+                break;
+
+            case "Select":
+                showColorPicker(ColorPickerFrame.MODE_STROKE_COLOR);
+                break;
+
+            default:
+                rainbowColor = false;
+                setStrokeColor(parseColor(color));
         }
     }
 
@@ -206,6 +220,10 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         this.currentPos = (Point) pos.clone();
     }
 
+    public void setBGColor(Color BGColor) {
+        this.BGColor = BGColor;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -213,18 +231,18 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(mode == MODE_PEN){
-            clearPos();
-            g2d.fillOval(e.getX(), e.getY(), 2, 2);
+        switch (mode) {
+            case MODE_PEN:
+            case MODE_ERASER:
+                clearPos();
+                g2d.fillOval(e.getX(), e.getY(), 2, 2);
+                break;
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         switch (mode){
-            case MODE_PEN:
-            case MODE_ERASER:
-                break;
 
             case MODE_LINE:
                 if(currentPos != null){
