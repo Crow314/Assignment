@@ -142,7 +142,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         currentPos = null;
     }
 
-    public Color parseColor(String colorName){
+    public static Color parseColor(String colorName){
         Color color = Color.BLACK;
         switch(colorName){
             case "Black":
@@ -168,7 +168,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         return color;
     }
 
-    public int parseThickness(String thicknessName){
+    public static int parseThickness(String thicknessName){
         int thickness = 3;
         switch (thicknessName){
             case "Thin":
@@ -186,7 +186,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
         return thickness;
     }
 
-    public int parseMode(String modeName){
+    public static int parseMode(String modeName){
         int mode = 0;
         switch (modeName){
             case "Pen":
