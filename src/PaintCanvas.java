@@ -8,7 +8,8 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public static final int MODE_LINE = 1;
     public static final int MODE_TRIANGLE = 2;
     public static final int MODE_CHARACTER = 3;
-    public static final int MODE_MAX = MODE_CHARACTER;
+    public static final int MODE_ERASER = 4;
+    public static final int MODE_MAX = MODE_ERASER;
 
     private int canvasWidth;
     private int canvasHeight;
@@ -60,9 +61,13 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void drawLine(Point pos1, Point pos2){
+        drawLine(pos1, pos2, strokeColor);
+    }
+
+    public void drawLine(Point pos1, Point pos2, Color color){
         BasicStroke stroke = new BasicStroke(strokeThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         g2d.setStroke(stroke);
-        g2d.setColor(strokeColor);
+        g2d.setColor(color);
         g2d.drawLine((int)pos1.getX(), (int)pos1.getY(), (int)pos2.getX(), (int)pos2.getY());
         repaint();
     }
@@ -74,7 +79,6 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     }
 
     public void drawText(Point pos, String text){
-        System.err.println(text + pos);
         g2d.drawString(text, (int)pos.getX(), (int)pos.getY());
         repaint();
     }
@@ -152,6 +156,12 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
             case "Character":
                 mode = MODE_CHARACTER;
+                break;
+
+            case "Eraser":
+                mode = MODE_ERASER;
+                break;
+
         }
         return mode;
     }
@@ -213,6 +223,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public void mouseReleased(MouseEvent e) {
         switch (mode){
             case MODE_PEN:
+            case MODE_ERASER:
                 break;
 
             case MODE_LINE:
@@ -253,17 +264,27 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (mode == MODE_PEN){
-            setCurrentPos(e.getPoint());
+        switch (mode){
+            case MODE_PEN:
+                setCurrentPos(e.getPoint());
 
-            if (currentPos != null && lastPos != null) {
-                drawLine(lastPos, currentPos);
-            }
+                if (currentPos != null && lastPos != null) {
+                    drawLine(lastPos, currentPos);
+                }
 
-            if (rainbowColor){
-                float[] hsb = Color.RGBtoHSB(strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), null);
-                setStrokeColor(Color.getHSBColor(hsb[0] + 0.01F, hsb[1], hsb[2]));
-            }
+                if (rainbowColor){
+                    float[] hsb = Color.RGBtoHSB(strokeColor.getRed(), strokeColor.getGreen(), strokeColor.getBlue(), null);
+                    setStrokeColor(Color.getHSBColor(hsb[0] + 0.01F, hsb[1], hsb[2]));
+                }
+                break;
+
+            case MODE_ERASER:
+                setCurrentPos(e.getPoint());
+
+                if (currentPos != null && lastPos != null) {
+                    drawLine(lastPos, currentPos, BGColor);
+                }
+                break;
         }
     }
 
