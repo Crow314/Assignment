@@ -13,7 +13,8 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public static final int MODE_TRIANGLE = 2;
     public static final int MODE_CHARACTER = 3;
     public static final int MODE_ERASER = 4;
-    public static final int MODE_MAX = MODE_ERASER;
+    public static final int MODE_STAR_STAMP = 5;
+    public static final int MODE_MAX = MODE_STAR_STAMP;
 
     private int canvasWidth;
     private int canvasHeight;
@@ -117,7 +118,7 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     public void saveImage(){
         JFileChooser fileChooser = new JFileChooser();
 
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             File file = fileChooser.getSelectedFile();
 
             try{
@@ -208,6 +209,9 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
                 mode = MODE_ERASER;
                 break;
 
+            case "Star Stamp":
+                mode = MODE_STAR_STAMP;
+                break;
         }
         return mode;
     }
@@ -282,7 +286,6 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         switch (mode){
-
             case MODE_LINE:
                 if(currentPos != null){
                     drawLine(currentPos, e.getPoint());
@@ -305,6 +308,11 @@ public class PaintCanvas extends Canvas implements MouseInputListener {
                 characterInputFrame.setPosition(e.getPoint());
                 characterInputFrame.setVisible(true);
                 break;
+
+            case MODE_STAR_STAMP:
+                //g2d.setFont(new Font("Yu Gothic", Font.PLAIN, 80));
+                drawText(e.getPoint(), "★");
+                //g2d.setFont(new Font("Yu Gothic", Font.PLAIN, 80));
         }
 
     }

@@ -72,7 +72,7 @@ public class Main {
         toolBoxPanel.setLayout(new FlowLayout());
         frame.getContentPane().add(toolBoxPanel);
 
-        String[] modeComboData = {"Pen", "Line", "Triangle", "Character", "Eraser"};
+        String[] modeComboData = {"Pen", "Line", "Triangle", "Character", "Eraser", "Star Stamp"};
         JComboBox<String> modeComboBox = new JComboBox<>(modeComboData);
         modeComboBox.setPreferredSize(new Dimension(toolBoxWidth, 40));
         toolBoxPanel.add(modeComboBox);
